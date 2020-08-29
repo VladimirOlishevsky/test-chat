@@ -8,7 +8,7 @@ function JoinBlock({ onLogin }) {
   const [isLoading, setLoading] = useState(false);
 
   const onEnter = async () => {
-    if ( !userName) {
+    if (!userName) {
       return alert('Неверный логин или пароль');
     }
     console.log(userName)
@@ -21,6 +21,15 @@ function JoinBlock({ onLogin }) {
     onLogin(obj);
   };
 
+
+  const onLoginChat = (e) => {
+
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      return onEnter()
+    }
+  }
+
   return (
     <div id="range5">
 
@@ -30,22 +39,23 @@ function JoinBlock({ onLogin }) {
 
             <div className="login-wr">
               <h2>Вход</h2>
-              <div className="form">               
-                  <input 
-                  className='password' 
-                  type="text" 
+              <div className="form">
+                <input
+                  onKeyDown={onLoginChat}
+                  className='password'
+                  type="text"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   placeholder="Пользователь" />
-                    <button disabled={isLoading} onClick={onEnter} className="btn btn-success"> Авторизоваться </button>
-          </div>
-        </div>
-
+                <button disabled={isLoading} onClick={onEnter} className="btn btn-success"> Авторизоваться </button>
               </div>
             </div>
-          </div>
 
+          </div>
         </div>
+      </div>
+
+    </div>
   );
 }
 

@@ -20,7 +20,6 @@ function App() {
     dispatch(setRoomId(socket.id))
     socket.emit('ROOM_JOIN', obj);
     socket.emit('GET_ROOMS');
-    //socket.emit('GET_ROOM_ID');
 
     dispatch(getRooms())
     const { data } = await axios.get(`/rooms/${socket.id}`);
@@ -28,12 +27,6 @@ function App() {
     dispatch(setData(data))
     //dispatch(getRooms(obj.roomId))
   };
-
-//   const getAllRooms = async () => {
-//   const { arr } = await axios.get(`/rooms/getrooms`);
-//   console.log(data)
-//   //dispatch(getRooms(rooms))
-// }
 
   const setUsers = (users) => {
     dispatch(setAllUsers(users))
@@ -52,9 +45,6 @@ const showMes = (mes) => {
     socket.on('ROOM_SET_USERS', setUsers);
     socket.on('ROOM_NEW_MESSAGE', addMessage);
     socket.on('GET_ROOMS', showMes);
-    //socket.on('GET_ROOM_ID', getRoomId)
-    //getAllRooms()
-    //socket.on('GET_ROOMS', getAllRooms);
   }, []);
 
   window.socket = socket;

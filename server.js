@@ -10,10 +10,6 @@ const rooms = new Map();
 const messages = [];
 
 
-const getMessages = (arr) => {
-    return arr.map(el => el.text)
-}
-
 app.get('/rooms/:id', (req, res) => {
 
     console.log('HELLO EVERYONE')
@@ -22,43 +18,9 @@ app.get('/rooms/:id', (req, res) => {
     console.log(messages)
 
     const obj = {
-            users: [...rooms.get(roomId).get('users').values()],
-            messages: messages
-        }
-        //////////////////////////////////////////////////////////////////////////////////////
-
-    // const obj = rooms.has(roomId) ? {
-    //         users: [...rooms.get(roomId).get('users').values()],
-    //         messages: messages
-    //     } : {
-    //         users: [...rooms.get(roomId).get('users').values()],
-    //         messages: messages
-    //     }
-    // const obj = rooms.has(roomId) ?
-    //     {
-    //         users: [...rooms.get(roomId).get('users').values()],
-    //         messages: [...rooms.get(roomId).get('messages').values()],
-    //     } :
-    //     {
-    //         users: [...rooms.get(roomId).get('users').values()],
-    //         messages: messages
-    //     };
-    // const obj = rooms.has(roomId) ? {
-    //     users: [...rooms.get(roomId).get('users').values()],
-    //     messages: [...rooms.get(roomId).get('messages').values()],
-    // } : {
-    //     users: [...rooms.get(roomId).get('users').values()],
-    //     messages: [...rooms.get(roomId).get('messages').values()]
-    //         //messages: [...rooms.get(roomId).get('messages').values()],
-    // };
-    //socket.broadcast.emit('ROOM_NEW_MESSAGE', obj)
-
-    //     const obj = rooms.has(roomId)
-    // ? {
-    //     users: [...rooms.get(roomId).get('users').values()],
-    //     messages: [...rooms.get(roomId).get('messages').values()],
-    //   }
-    // : { users: [], messages: [] };
+        users: [...rooms.get(roomId).get('users').values()],
+        messages: messages
+    }
     res.json(obj);
 });
 
@@ -86,15 +48,15 @@ io.on('connection', (socket) => {
 
     });
 
-    socket.on('ROOM_NEW_MESSAGE', ({ roomId, userName, text }) => {
+    socket.on('ROOM_NEW_MESSAGE', ({ roomId, userName, text, date }) => {
         const obj = {
             userName,
             text,
+            date
         };
         rooms.get(roomId).get('messages').push(obj);
         socket.broadcast.emit('ROOM_NEW_MESSAGE', obj)
         messages.push(obj);
-        //socket.to(roomId).broadcast.emit('ROOM_NEW_MESSAGE', obj);
     });
 
     socket.on('GET_ROOMS', () => {
