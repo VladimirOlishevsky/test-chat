@@ -1,13 +1,14 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-
-import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom';
 
 function LinkRef(props) {
-    const { get } = props;
+    const { get, obj } = props;
+
     return (
-        <Link to='/' onClick={get}>sgdfgfghfghhgj</Link>
-            
+        <p>
+            <Link to='/' onClick={(e) => get(e.target.textContent)}>{obj}</Link>
+        </p>
+
     )
 }
 

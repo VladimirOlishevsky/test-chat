@@ -7,22 +7,60 @@ const io = require('socket.io')(server);
 app.use(express.json());
 
 const rooms = new Map();
+const messages = [];
+
+
+const getMessages = (arr) => {
+    return arr.map(el => el.text)
+}
 
 app.get('/rooms/:id', (req, res) => {
+
+    console.log('HELLO EVERYONE')
     const { id: roomId } = req.params;
-    //console.log(req.params)
-    const obj = rooms.has(roomId) ? {
-        users: [...rooms.get(roomId).get('users').values()],
-        messages: [...rooms.get(roomId).get('messages').values()],
-    } : { users: [], messages: [] };
+
+    console.log(messages)
+
+    const obj = {
+            users: [...rooms.get(roomId).get('users').values()],
+            messages: messages
+        }
+        //////////////////////////////////////////////////////////////////////////////////////
+
+    // const obj = rooms.has(roomId) ? {
+    //         users: [...rooms.get(roomId).get('users').values()],
+    //         messages: messages
+    //     } : {
+    //         users: [...rooms.get(roomId).get('users').values()],
+    //         messages: messages
+    //     }
+    // const obj = rooms.has(roomId) ?
+    //     {
+    //         users: [...rooms.get(roomId).get('users').values()],
+    //         messages: [...rooms.get(roomId).get('messages').values()],
+    //     } :
+    //     {
+    //         users: [...rooms.get(roomId).get('users').values()],
+    //         messages: messages
+    //     };
+    // const obj = rooms.has(roomId) ? {
+    //     users: [...rooms.get(roomId).get('users').values()],
+    //     messages: [...rooms.get(roomId).get('messages').values()],
+    // } : {
+    //     users: [...rooms.get(roomId).get('users').values()],
+    //     messages: [...rooms.get(roomId).get('messages').values()]
+    //         //messages: [...rooms.get(roomId).get('messages').values()],
+    // };
+    //socket.broadcast.emit('ROOM_NEW_MESSAGE', obj)
+
+    //     const obj = rooms.has(roomId)
+    // ? {
+    //     users: [...rooms.get(roomId).get('users').values()],
+    //     messages: [...rooms.get(roomId).get('messages').values()],
+    //   }
+    // : { users: [], messages: [] };
     res.json(obj);
 });
-
-// app.get('/:id', (req, res) => {
-//     const { id: roomId } = req.params;
-//     console.log(roomId)
-//         //res.send(rooms);
-// });
 
 app.post('/rooms', (req, res) => {
     const { roomId, userName } = req.body;
@@ -44,18 +82,9 @@ io.on('connection', (socket) => {
         socket.join(roomId);
         rooms.get(roomId).get('users').set(socket.id, userName);
         const users = [...rooms.get(roomId).get('users').values()];
-        //console.log(users)
         socket.to(roomId).broadcast.emit('ROOM_SET_USERS', users);
 
     });
-
-    // socket.on('ROOM_JOIN', ({ roomId, userName }) => {
-    //     socket.join(roomId);
-    //     rooms.get(roomId).get('users').set(socket.id, userName);
-    //     const users = [...rooms.get(roomId).get('users').values()];
-    //     socket.to(roomId).broadcast.emit('ROOM_SET_USERS', users);
-
-    // });
 
     socket.on('ROOM_NEW_MESSAGE', ({ roomId, userName, text }) => {
         const obj = {
@@ -64,7 +93,8 @@ io.on('connection', (socket) => {
         };
         rooms.get(roomId).get('messages').push(obj);
         socket.broadcast.emit('ROOM_NEW_MESSAGE', obj)
-            //socket.to(roomId).broadcast.emit('ROOM_NEW_MESSAGE', obj);
+        messages.push(obj);
+        //socket.to(roomId).broadcast.emit('ROOM_NEW_MESSAGE', obj);
     });
 
     socket.on('GET_ROOMS', () => {
@@ -75,14 +105,6 @@ io.on('connection', (socket) => {
         io.sockets.emit('GET_ROOMS', ttt)
 
     });
-
-    socket.on('join', (id) => {
-
-        console.log('yeah! you are welcome')
-        socket.join(id);
-
-    });
-
 
     socket.on('disconnect', () => {
         rooms.forEach((value, roomId) => {

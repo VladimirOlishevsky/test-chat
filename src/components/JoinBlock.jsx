@@ -4,7 +4,6 @@ import socket from '../socket';
 
 
 function JoinBlock({ onLogin }) {
-  const [roomId, setRoomId] = useState(socket.id);
   const [userName, setUserName] = useState('');
   const [isLoading, setLoading] = useState(false);
 
@@ -31,14 +30,7 @@ function JoinBlock({ onLogin }) {
 
             <div className="login-wr">
               <h2>Вход</h2>
-              <div className="form">
-                {/* <input 
-                className='login' 
-                type="text" 
-                value={roomId}
-                onChange={(e) => setRoomId(e.target.value)}
-                placeholder="Room Id" /> */}
-                
+              <div className="form">               
                   <input 
                   className='password' 
                   type="text" 

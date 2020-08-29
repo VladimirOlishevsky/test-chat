@@ -24,9 +24,7 @@ function App() {
 
     dispatch(getRooms())
     const { data } = await axios.get(`/rooms/${socket.id}`);
-    //const arr = await axios.get(`/rooms/getrooms`);
 
-    console.log(data)
     dispatch(setData(data))
     //dispatch(getRooms(obj.roomId))
   };
@@ -57,7 +55,7 @@ const showMes = (mes) => {
     //socket.on('GET_ROOM_ID', getRoomId)
     //getAllRooms()
     //socket.on('GET_ROOMS', getAllRooms);
-  }, [],setUsers,addMessage, showMes);
+  }, []);
 
   window.socket = socket;
 

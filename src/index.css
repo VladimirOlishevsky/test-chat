@@ -137,6 +137,10 @@ body {
     padding: 0 15px;
 }
 
+a {
+    color: #fff
+}
+
 
 /* #range5 {
     background: rgba(77, 56, 75, 1);

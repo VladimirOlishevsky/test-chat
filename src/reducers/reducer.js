@@ -19,6 +19,7 @@ export default (state = initial, action) => {
             };
 
         case 'SET_DATA':
+            console.log(action.payload.messages)
             return {
                 ...state,
                 users: action.payload.users,
