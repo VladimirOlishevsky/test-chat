@@ -4,7 +4,6 @@ const initial = {
     userName: null,
     users: [],
     messages: [],
-    rooms: [],
 }
 
 
@@ -35,11 +34,6 @@ export default (state = initial, action) => {
             return {
                 ...state,
                 roomId: action.payload,
-            };
-        case 'GET_ROOMS':
-            return {
-                ...state,
-                rooms: action.payload,
             };
 
         case 'NEW_MESSAGE':

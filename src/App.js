@@ -25,7 +25,6 @@ function App() {
     const { data } = await axios.get(`/rooms/${socket.id}`);
 
     dispatch(setData(data))
-    //dispatch(getRooms(obj.roomId))
   };
 
   const setUsers = (users) => {
@@ -36,15 +35,9 @@ function App() {
     dispatch(newMessage(message));
   };
 
-const showMes = (mes) => {
-  console.log(mes)
-}
-
-
   useEffect(() => {
     socket.on('ROOM_SET_USERS', setUsers);
     socket.on('ROOM_NEW_MESSAGE', addMessage);
-    socket.on('GET_ROOMS', showMes);
   }, []);
 
   window.socket = socket;
@@ -52,10 +45,10 @@ const showMes = (mes) => {
   return (
     <div className="wrapper">
       {!state.joined ? (
-        <JoinBlock  onLogin={onLogin} />
+        <JoinBlock onLogin={onLogin} />
       ) : (
-        <Chat {...state} onAddMessage={addMessage} />
-      )}
+          <Chat {...state} onAddMessage={addMessage} />
+        )}
     </div>
   );
 }

@@ -141,6 +141,10 @@ a {
     color: #fff
 }
 
+a:hover {
+    color: #fff;
+}
+
 button {
     margin-right: 10px;
 }

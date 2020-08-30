@@ -1,5 +1,4 @@
 const express = require('express');
-
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
@@ -12,10 +11,7 @@ const messages = [];
 
 app.get('/rooms/:id', (req, res) => {
 
-    console.log('HELLO EVERYONE')
     const { id: roomId } = req.params;
-
-    console.log(messages)
 
     const obj = {
         users: [...rooms.get(roomId).get('users').values()],
@@ -60,11 +56,11 @@ io.on('connection', (socket) => {
     });
 
     socket.on('GET_ROOMS', () => {
-        const keys = [...rooms.keys()]
-        console.log(JSON.stringify(keys))
-        const ttt = JSON.stringify(keys);
+        const roomKeys = [...rooms.keys()]
+        console.log(JSON.stringify(roomKeys))
+        const roomKeysStringify = JSON.stringify(roomKeys);
         //socket.to(roomId).broadcast.emit('GET_ROOMS', rooms);
-        io.sockets.emit('GET_ROOMS', ttt)
+        io.sockets.emit('GET_ROOMS', roomKeysStringify)
 
     });
 

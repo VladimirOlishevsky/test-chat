@@ -15,25 +15,12 @@ function Chat(props) {
   const [messageValue, setMessageValue] = useState('');
   const messagesRef = useRef(null);
 
-  const sendRoomLink =() => {
-    socket.emit('ROOM_NEW_MESSAGE', {
-      userName,
-      roomId,
-      text: {
-        type: 'join my room',
-        number: roomId,
-        date: moment().format('D:MM H:mm')
-      },
-    });
-    onAddMessage({ userName, text: roomId, date: moment().format('D:MM H:mm') });
-  }
-  
   const joinRoom = async (obj) => {
     const newObj = {
       roomId: obj,
       userName,
     }
-        dispatch(joinUser(newObj));
+    dispatch(joinUser(newObj));
     dispatch(setRoomId(socket.id));
 
     socket.emit('ROOM_JOIN', newObj);
@@ -46,23 +33,38 @@ function Chat(props) {
     dispatch(setData(data))
   };
 
-  const onSendMessage = () => {
-    socket.emit('ROOM_NEW_MESSAGE', {
-      userName,
-      roomId,
-      text: messageValue,
-      date: moment().format('D:MM H:mm')
-    });
-    onAddMessage({ userName, text: messageValue, date: moment().format('D:MM H:mm')});
-    setMessageValue('');
+  const onSendMessage = (type) => {
+
+    if (type) {
+      socket.emit('ROOM_NEW_MESSAGE', {
+        userName,
+        roomId,
+        text: {
+          type: type,
+          number: roomId,
+          date: moment().format('D:MM H:mm')
+        },
+      });
+      onAddMessage({ userName, text: roomId, date: moment().format('D:MM H:mm') });
+    } else {
+      socket.emit('ROOM_NEW_MESSAGE', {
+        userName,
+        roomId,
+        text: messageValue,
+        date: moment().format('D:MM H:mm')
+      });
+      onAddMessage({ userName, text: messageValue, date: moment().format('D:MM H:mm') });
+      setMessageValue('');
+    }
+
   };
 
   const enterSendMessage = (e) => {
-    
-    if(e.key === 'Enter') {
+
+    if (e.key === 'Enter') {
       e.preventDefault()
       return onSendMessage()
-    } 
+    }
   }
 
   useEffect(() => {
@@ -89,14 +91,14 @@ function Chat(props) {
                 <div key={index} className="message">
                   <LinkRef obj={message.text.number} get={joinRoom} />
                   <div>
-                  <span className='message-date'>{message.text.date}</span>
+                    <span className='message-date'>{message.text.date}</span>
                     <span className='message-name'>{message.userName}</span>
                   </div>
                 </div>
                 : <div key={index} className="message">
                   <p>{message.text}</p>
                   <div>
-                  <span className='message-date'>{message.date}</span>
+                    <span className='message-date'>{message.date}</span>
                     <span className='message-name'>{message.userName}</span>
                   </div>
                 </div>
@@ -113,7 +115,7 @@ function Chat(props) {
             <button onClick={onSendMessage} type="button" className="btn btn-primary">
               Отправить
           </button>
-            <button onClick={sendRoomLink} type="button" className="btn btn-primary">
+            <button onClick={() => onSendMessage('join to my room')} type="button" className="btn btn-primary">
               Отправить ссылку на комнату
           </button>
           </form>
