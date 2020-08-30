@@ -28,8 +28,7 @@ function Chat(props) {
 
     dispatch(getRooms())
     const { data } = await axios.get(`/rooms/${socket.id}`);
-
-    console.log(data)
+    
     dispatch(setData(data))
   };
 
@@ -56,7 +55,6 @@ function Chat(props) {
       onAddMessage({ userName, text: messageValue, date: moment().format('D:MM H:mm') });
       setMessageValue('');
     }
-
   };
 
   const enterSendMessage = (e) => {
