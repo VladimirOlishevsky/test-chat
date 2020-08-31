@@ -44,7 +44,8 @@ function Chat(props) {
           date: moment().format('D:MM H:mm')
         },
       });
-      onAddMessage({ userName, text: roomId, date: moment().format('D:MM H:mm') });
+     onAddMessage({ userName, text: roomId, date: moment().format('D:MM H:mm') });
+      
     } else {
       socket.emit('ROOM_NEW_MESSAGE', {
         userName,
@@ -52,8 +53,10 @@ function Chat(props) {
         text: messageValue,
         date: moment().format('D:MM H:mm')
       });
-      onAddMessage({ userName, text: messageValue, date: moment().format('D:MM H:mm') });
       setMessageValue('');
+     onAddMessage({ userName, text: messageValue, date: moment().format('D:MM H:mm') });
+      
+      
     }
   };
 
@@ -110,7 +113,7 @@ function Chat(props) {
               onChange={(e) => setMessageValue(e.target.value)}
               className="form-control"
               rows="3"></textarea>
-            <button onClick={onSendMessage} type="button" className="btn btn-primary">
+            <button onClick={() => onSendMessage()} type="button" className="btn btn-primary">
               Отправить
           </button>
             <button onClick={() => onSendMessage('join to my room')} type="button" className="btn btn-primary">
